@@ -1,73 +1,82 @@
-## How to setup
+# ![Laravel RealWorld Example App](.github/readme/logo.png)
 
+[![RealWorld: Backend](https://img.shields.io/badge/RealWorld-Backend-blueviolet.svg)](https://github.com/gothinkster/realworld)
+[![Tests: status](https://github.com/f1amy/laravel-realworld-example-app/actions/workflows/tests.yml/badge.svg)](https://github.com/f1amy/laravel-realworld-example-app/actions/workflows/tests.yml)
+[![Coverage: percent](https://codecov.io/gh/f1amy/laravel-realworld-example-app/branch/main/graph/badge.svg)](https://codecov.io/gh/f1amy/laravel-realworld-example-app)
+[![Static Analysis: status](https://github.com/f1amy/laravel-realworld-example-app/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/f1amy/laravel-realworld-example-app/actions/workflows/static-analysis.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellowgreen.svg)](https://opensource.org/licenses/MIT)
 
-```
-composer create-project --prefer-dist laravel/laravel example
-cd example
-php artisan serve --port=3000
+> Example of a PHP-based Laravel application containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) API spec.
 
+This codebase was created to demonstrate a backend application built with [Laravel framework](https://laravel.com/) including RESTful services, CRUD operations, authentication, routing, pagination, and more.
 
-```
+We've gone to great lengths to adhere to the **Laravel framework** community style guides & best practices.
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## How it works
 
-## About Laravel
+The API is built with [Laravel](https://laravel.com/), making the most of the framework's features out-of-the-box.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The application is using a custom JWT auth implementation: [`app/Jwt`](./app/Jwt).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Getting started
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The preferred way of setting up the project is using [Laravel Sail](https://laravel.com/docs/sail),
+for that you'll need [Docker](https://docs.docker.com/get-docker/) under Linux / macOS (or Windows WSL2).
 
-## Learning Laravel
+### Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Clone the repository and change directory:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    git clone https://github.com/f1amy/laravel-realworld-example-app.git
+    cd laravel-realworld-example-app
 
-## Laravel Sponsors
+Install dependencies (if you have `composer` locally):
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+    composer create-project
 
-### Premium Partners
+Alternatively you can do the same with Docker:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
+    docker run --rm -it \
+        --volume $PWD:/app \
+        --user $(id -u):$(id -g) \
+        composer create-project
 
-## Contributing
+Start the containers with PHP application and PostgreSQL database:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    ./vendor/bin/sail up -d
 
-## Code of Conduct
+(Optional) Configure a Bash alias for `sail` command:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
 
-## Security Vulnerabilities
+Migrate the database with seeding:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    sail artisan migrate --seed
+
+## Usage
+
+The API is available at `http://localhost:3000/api` (You can change the `APP_PORT` in `.env` file).
+
+### Run tests
+
+    sail artisan test
+
+### Run PHPStan static analysis
+
+    sail php ./vendor/bin/phpstan
+
+### OpenAPI specification (not ready yet)
+
+Swagger UI will be live at [http://localhost:3000/api/documentation](http://localhost:3000/api/documentation).
+
+For now, please visit the specification [here](https://github.com/gothinkster/realworld/tree/main/api).
+
+## Contributions
+
+Feedback, suggestions, and improvements are welcome, feel free to contribute.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The MIT License (MIT). Please see [`LICENSE`](./LICENSE) for more information.
